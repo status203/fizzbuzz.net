@@ -1,0 +1,15 @@
+# VSCode
+.vscode/**
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+
+# dotnet core
+bin/
+obj/
+
+# App
+EfTeaRound.db
+
+# Misc. Environment
+.directory
