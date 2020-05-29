@@ -3,19 +3,45 @@ using System.Linq;
 
 namespace Fizzbuzz
 {
-    public static class Fizzbuzz
+    public class Fizzbuzz
     {
+        /// <summary>
+        /// How factors translate to strings.
+        /// Multiple factors are appended (smallest -> largest)
+        /// No specials rules for multiples in the rules, e.g. if multiples
+        /// of 3 & 6 are to be translated, both strings are appended
+        /// </summary>
+        /// <value></value>
+        private SortedList<int, string> Rules { get; set; }
+
+        public Fizzbuzz(SortedList<int, string> rules)
+        {
+            // Take a copy so they can't be changed under us.
+            Rules = new SortedList<int, string>(rules);
+        }
+
+        /// <summary>
+        /// Returns whether m is exactly divisible by n.
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="n"></param>
+        private bool IsDivisable(int m, int n) => (m % n == 0);
+
         /// <summary>
         /// Returns the fizzbuzz output for the n'th entry.
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static string Entry(int n) {
-            if (n % 15 == 0) return "fizzbuzz";
-            if (n % 5 == 0) return "buzz";
-            if (n % 3 == 0) return "fizz";
-
-            return n.ToString();
+        public string Entry(int n)
+        {
+            // Assume there won't be sufficient rules to make a builder worthwhile.
+            var replacement = "";
+            foreach(var kvp in Rules) {
+                if (IsDivisable(n, kvp.Key)) {
+                    replacement += kvp.Value;
+                }
+            }
+            return replacement == "" ? n.ToString() : replacement;
         }
 
         /// <summary>
@@ -23,8 +49,9 @@ namespace Fizzbuzz
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static IEnumerable<string> Sequence(int n) {
-            return Enumerable.Range(1, n).Select(Fizzbuzz.Entry);
+        public IEnumerable<string> Sequence(int n)
+        {
+            return Enumerable.Range(1, n).Select(Entry);
         }
     }
 }
